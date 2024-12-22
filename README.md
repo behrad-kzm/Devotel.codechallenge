@@ -40,17 +40,22 @@ project/
 2. Update the Firebase credentials in the file with your Firebase project details.
 
 ### 3. Set Up Authentication Service
-1. Place the `firebase-service-account.json` file in the `authentication-service/envs` folder.
+1. Place the `firebase-service-account.json` file in the `environments/auth/` folder.
 
 ### 4. Running the Project
 1. From the root directory, run the following command to build and start the services using Docker Compose:
    
    ```bash
-   docker-compose up --build -d
+   docker compose up --build -d
    ```
 
    This will set up the containers, database, and networking.
 
+   ```bash
+   docker compose down --volume
+   ```
+
+   This will stop all contianer with the volume we've created for them.
 ### 5. Postman Setup
 1. Import the `Devotel.postman_collection.json` file into Postman.
 2. Create an environment in Postman and define a variable `{{token}}`.
