@@ -1,0 +1,39 @@
+# compiled output
+*/services/dist
+*/services/node_modules
+
+# Logs
+*/services/logs
+*/services/*.log
+*/services/npm-debug.log*
+*/services/pnpm-debug.log*
+*/services/yarn-debug.log*
+*/services/yarn-error.log*
+*/services/lerna-debug.log*
+
+# OS
+*/.DS_Store
+*/services/.DS_Store
+.DS_Store
+# Tests
+*/coverage
+*/.nyc_output
+
+# IDEs and editors
+*/services/.idea
+*/services/.project
+*/services/.classpath
+*/services/.c9/
+*/services/*.launch
+*/services/.settings/
+*/services/*.sublime-workspace
+*/services/.env
+*/services/envs
+services/*/envs/*.json
+services/*/envs/*.env
+# IDE - VSCode
+*/.vscode/*
+*/!.vscode/settings.json
+*/!.vscode/tasks.json
+*/!.vscode/launch.json
+*/!.vscode/extensions.json

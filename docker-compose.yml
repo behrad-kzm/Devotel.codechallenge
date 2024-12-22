@@ -1,0 +1,113 @@
+version: '3.8'
+
+services:
+  postgres:
+    container_name: postgres
+    image: postgres:14-alpine
+    restart: always
+    environment:
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: 123456
+    ports:
+      - "5432:5432"
+    networks:
+      - app-network
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+      - ./init-scripts/create_table.sql:/docker-entrypoint-initdb.d/create_table.sql
+
+  auth-service:
+    container_name: auth-service
+    build:
+      context: ./services/authentication-service
+      dockerfile: Dockerfile.dev
+    expose:
+      - 3001
+    networks:
+      - app-network
+    depends_on:
+      - postgres
+    restart: always
+    volumes:
+      - ./environments/auth/.app.env.example:/usr/src/app/envs/.app.env:ro
+      - ./environments/auth/firebase-service-account.json:/usr/src/app/envs/firebase-service-account.json:ro
+    ports:
+      - "3001:3001"
+  
+  image-service:
+    container_name: image-service
+    build:
+      context: ./services/image-service
+      dockerfile: Dockerfile.dev
+    expose:
+      - 3004
+    networks:
+      - app-network
+    restart: always
+    depends_on:
+      - postgres
+    command: /bin/bash /opt/startup.dev.sh
+    volumes:
+      - ./environments/image/.app.env.example:/usr/src/app/envs/.app.env:ro
+    ports:
+      - "3004:3004"
+  
+  post-service:
+    container_name: post-service
+    build:
+      context: ./services/post-service
+      dockerfile: Dockerfile.dev
+    expose:
+      - 3003
+    networks:
+      - app-network
+    restart: always
+    depends_on:
+      - postgres
+    command: /bin/bash /opt/startup.dev.sh
+    volumes:
+      - ./environments/post/.app.env.example:/usr/src/app/envs/.app.env:ro
+    ports:
+      - "3003:3003"
+  
+  user-service:
+    container_name: user-service
+    build:
+      context: ./services/user-service
+      dockerfile: Dockerfile.dev
+    expose:
+      - 3002
+    networks:
+      - app-network
+    restart: always
+    depends_on:
+      - postgres
+    command: /bin/bash /opt/startup.dev.sh
+    volumes:
+      - ./environments/user/.app.env.example:/usr/src/app/envs/.app.env:ro
+    ports:
+      - "3002:3002"
+
+  gateway:
+    container_name: gateway
+    build:
+      context: ./services/api-gateway
+      dockerfile: Dockerfile.dev
+    expose:
+      - 3000
+    networks:
+      - app-network
+    restart: always
+    command: /bin/bash /opt/startup.dev.sh
+    volumes:
+      - ./environments/gateway/.app.env.example:/usr/src/app/envs/.app.env:ro
+      - ./environments/gateway/.service-discovery.env.example:/usr/src/app/envs/.service-discovery.env:ro
+    ports:
+      - "3000:3000"
+networks:
+  app-network:
+    driver: bridge
+
+volumes:
+  postgres-data:
+    driver: local

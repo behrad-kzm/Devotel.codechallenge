@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Firebase ID Token Generator</title>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+</head>
+<body>
+    <h1>Firebase ID Token Generator</h1>
+    <div>
+        <label for="email">Email:</label>
+        <input type="email" id="email" placeholder="Enter your email" required>
+    </div>
+    <div>
+        <label for="password">Password:</label>
+        <input type="password" id="password" placeholder="Enter your password" required>
+    </div>
+    <button id="login">Get ID Token</button>
+    <p id="output" style="color: red;"></p>
+
+    <script>
+        // Firebase project configuration
+        const firebaseConfig = {
+            apiKey: "",
+            authDomain: "",
+            projectId: "",
+            storageBucket: "",
+            messagingSenderId: "",
+            appId: ""
+        };
+
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
+
+        // Function to handle login
+        async function login(email, password) {
+            const output = document.getElementById("output");
+            output.textContent = "";
+
+            try {
+                const userCredential = await auth.signInWithEmailAndPassword(email, password);
+                const user = userCredential.user;
+                const idToken = await user.getIdToken(true);
+
+                output.style.color = "green";
+                output.textContent = `ID Token: ${idToken}`;
+            } catch (error) {
+                output.style.color = "red";
+                output.textContent = `Error: ${error.message}`;
+                console.error("Login Error:", error);
+            }
+        }
+
+        // Button to log in with provided email and password
+        document.getElementById("login").addEventListener("click", () => {
+            const email = document.getElementById("email").value;
+            const password = document.getElementById("password").value;
+
+            if (!email || !password) {
+                const output = document.getElementById("output");
+                output.style.color = "red";
+                output.textContent = "Please enter both email and password.";
+                return;
+            }
+
+            login(email, password);
+        });
+
+    </script>
+</body>
+</html>

@@ -1,0 +1,3 @@
+CREATE DATABASE userdb;
+CREATE DATABASE imagedb;
+CREATE DATABASE postdb;
