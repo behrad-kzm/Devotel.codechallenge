@@ -15,9 +15,6 @@ export class FindManyPostsRequestDto {
   @IsUUID()
   authorId?: string;
 
-  // page: number;
-  // limit: number;
-
   @ApiProperty({ example: 1 })
   @IsNotEmpty()
   @IsInt()
