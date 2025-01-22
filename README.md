@@ -1,5 +1,12 @@
 # Devotel Code Challenge
 
+The goal was to implement best solution within 3 days.
+
+TODO 1: All image blobs must normalize and varify before storing them in the storage to prevent uploading malewares with .png format.
+TODO 2: We should create specific class for each exceptions isntead of creating at the calling point.
+TODO 3: It's better to use a message queue for microservice communications.
+TODO 4: Infrastructure is just a docker compose which is not practical; we need to setup yaml files for kubernetes deployment.
+ 
 This project follows a microservice architecture with the following services:
 
 - **authentication-service**: Manages user authentication and Firebase integration.
